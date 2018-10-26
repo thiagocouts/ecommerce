@@ -13,7 +13,7 @@
   },
   "autoload": {
     "psr-4": {
-      "": "vendor\\couts\\php-classes\\src"
+      "Couts\\": "vendor\\couts\\php-classes\\src"
     }
   }
 }
