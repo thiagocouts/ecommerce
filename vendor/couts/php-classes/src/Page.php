@@ -10,10 +10,15 @@ class Page
 
     private $options;
 
-    private $defaults = ['data' => []];
+    private $defaults = [
+        'data' => [],
+        'header' => true,
+        'footer' => true
+    ];
 
     public function __construct($opts = [], $tpl_dir = "/views/")
     {
+        //$this->defaults["data"]["session"] = $_SESSION;
         $this->options = array_merge($this->defaults, $opts);
 
         $config = array(
@@ -28,7 +33,9 @@ class Page
 
         $this->setData($this->options['data']);
 
-        $this->tpl->draw("header");
+        if ($this->options['header'] == true) {
+            $this->tpl->draw("header");
+        }
     }
 
     private function setData($data = [])
@@ -47,6 +54,8 @@ class Page
 
     public function __destruct()
     {
-        $this->tpl->draw("footer");
+        if ($this->options['footer'] == true) {
+            $this->tpl->draw("footer");
+        }
     }
 }
