@@ -71,7 +71,7 @@
             </div>
             <!-- /.social-auth-links -->
 
-            <a href="#">I forgot my password</a><br>
+            <a href="/admin/forgot">I forgot my password</a> <br>
             <a href="/resource/admin/register.html" class="text-center">Register a new membership</a>
 
         </div>

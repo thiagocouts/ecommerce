@@ -21,7 +21,7 @@ class Model
         }
     }
 
-    public function setData($data = [])
+    public function setData($data = array())
     {
         foreach ($data as $key => $value) {
             $this->{"set" . $key}($value);
