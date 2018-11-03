@@ -31,6 +31,7 @@ class Mailer
         $html = $tpl->draw($tplName, true);
 
         $this->mail = new \PHPMailer;
+        $this->mail->CharSet = 'UTF-8';
 
 		//Tell PHPMailer to use SMTP
         $this->mail->isSMTP();
