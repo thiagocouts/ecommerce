@@ -16,6 +16,18 @@ class Product extends Model
         return $products;
     }
 
+    public static function checkList($list)
+    {
+        foreach ($list as &$row) {
+            $p = new Product();
+            $p->setData($row);
+
+            $row = $p->getValues();
+        }
+
+        return $list;
+    }
+
     public function store()
     {
         $sql = new Sql;
@@ -50,6 +62,22 @@ class Product extends Model
     public function delete()
     {
         $sql = new Sql;
+
+        if (file_exists($_SERVER["DOCUMENT_ROOT"] .
+            DIRECTORY_SEPARATOR . "resource" .
+            DIRECTORY_SEPARATOR . "site" .
+            DIRECTORY_SEPARATOR . "img" .
+            DIRECTORY_SEPARATOR . "products" .
+            DIRECTORY_SEPARATOR . $this->getidproduct() . ".jpg")) {
+
+            unlink($_SERVER["DOCUMENT_ROOT"] .
+                DIRECTORY_SEPARATOR . "resource" .
+                DIRECTORY_SEPARATOR . "site" .
+                DIRECTORY_SEPARATOR . "img" .
+                DIRECTORY_SEPARATOR . "products" .
+                DIRECTORY_SEPARATOR . $this->getidproduct() . ".jpg");
+        }
+
         $sql->query("DELETE FROM tb_products WHERE idproduct = :idproduct", [
             ":idproduct" => $this->getidproduct()
         ]);

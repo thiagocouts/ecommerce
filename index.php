@@ -13,6 +13,7 @@ use Couts\Models\Category;
 $app = new Slim;
 $app->config('debug', true);
 
+require_once("functions.php");
 require_once("routes/web.php");
 require_once("routes/admin.php");
 require_once("routes/admin_users.php");
