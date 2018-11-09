@@ -8,7 +8,7 @@ class Sql
 	const HOSTNAME = "127.0.0.1";
 	const USERNAME = "thiago";
 	const PASSWORD = "Couts#1987";
-	const DBNAME = "db_ecommerce";
+	const DBNAME = "ecommerce";
 
 	private $conn;
 
@@ -42,10 +42,10 @@ class Sql
 		$stmt->execute();
 	}
 
-	public function select($rawQuery, $params = array()) : array
+	public function select($rawQuery, $params = array())
 	{
 		$stmt = $this->conn->prepare($rawQuery);
-
+		
 		$this->setParams($stmt, $params);
 
 		$stmt->execute();
