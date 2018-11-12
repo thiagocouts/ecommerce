@@ -103,14 +103,14 @@ class User extends Model
         $sql = new Sql;
 
         $data = $sql->select("CALL sp_users_save(:desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", [
-            ":desperson" => utf8_decode($this->getdesperson()),
+            ":desperson" => $this->getdesperson(),
             ":deslogin" => $this->getdeslogin(),
             ":despassword" => User::getPasswordHash($this->getdespassword()),
             ":desemail" => $this->getdesemail(),
             ":nrphone" => $this->getnrphone(),
             ":inadmin" => $this->getinadmin()
         ]);
-
+        
         $this->setData($data[0]);
 
         return $data;
@@ -137,7 +137,7 @@ class User extends Model
 
         $user = $sql->select("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", [
             ":iduser" => $this->getiduser(),
-            ":desperson" => utf8_decode($this->getdesperson()),
+            ":desperson" => $this->getdesperson(),
             ":deslogin" => $this->getdeslogin(),
             ":despassword" => User::getPasswordHash($this->getdespassword()),
             ":desemail" => $this->getdesemail(),
@@ -157,7 +157,7 @@ class User extends Model
         ]);
     }
 
-    public static function forgot($email)
+    public static function forgot($email, $inadmin = true)
     {
         $sql = new Sql;
         $results = $sql->select(
@@ -186,7 +186,11 @@ class User extends Model
                 $cod = openssl_encrypt($user['idrecovery'], 'aes-256-cbc', User::SECRET, 0, $iv);
                 $code = base64_encode($iv . $cod);
 
-                $link = "http://localhost:8080/admin/forgot/reset?code=" . $code;
+                if ($inadmin === true) {
+                    $link = "http://localhost:8080/admin/forgot/reset?code=" . $code;
+                } else {
+                    $link = "http://localhost:8080/forgot/reset?code=" . $code;
+                }
 
                 $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinição de senha", "forgot", [
                     "name" => $data["desperson"],
@@ -276,6 +280,15 @@ class User extends Model
         $_SESSION[User::ERROR_REGISTER] = $msg;
     }
 
+    public static function getErrorRegister()
+    {
+        $msg = (isset($_SESSION[User::ERROR_REGISTER]) && $_SESSION[User::ERROR_REGISTER]) ? $_SESSION[User::ERROR_REGISTER] : '';
+
+        User::clearErrorRegister();
+
+        return $msg;
+    }
+
     public static function clearErrorRegister()
     {
         $_SESSION[User::ERROR_REGISTER] = null;
@@ -285,11 +298,11 @@ class User extends Model
     {
         $sql = new Sql();
 
-        $result = $sql->select("SELECT * FROM tb_users WHERE deslogin = :deslogin", [
+        $user = $sql->select("SELECT * FROM tb_users WHERE deslogin = :deslogin", [
             ":deslogin" => $login
         ]);
 
-        return (count($result) > 0);
+        return (count($user) > 0);
     }
 
     public static function getPasswordHash($password)
