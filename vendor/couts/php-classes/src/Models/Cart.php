@@ -257,4 +257,15 @@ class Cart extends Model
         $this->setvlsubtotal($total['vlprice']);
         $this->setvltotal($total['vlprice'] + $this->getvlfreight());
     }
+
+    public static function removeToSession()
+    {
+        $_SESSION[Cart::SESSION] = null;
+    }
+
+    public function checkZipCode()
+    {
+        $products = $this->getProducts();
+        if (!count($products) > 0) $this->setdeszipcode('');
+    }
 }
