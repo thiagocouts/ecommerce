@@ -19,6 +19,7 @@ require_once("routes/admin.php");
 require_once("routes/admin_users.php");
 require_once("routes/admin_categories.php");
 require_once("routes/admin_products.php");
+require_once("routes/admin_orders.php");
 
 $app->run();
 
