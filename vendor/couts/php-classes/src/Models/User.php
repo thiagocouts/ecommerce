@@ -347,4 +347,51 @@ class User extends Model
         
         return $orders;
     }
+
+    public static function getPage($page = 1, $itemsPerPage = 10)
+    {
+        $start = ($page - 1) * $itemsPerPage;
+        $sql = new Sql;
+
+        $results = $sql->select(
+            "SELECT SQL_CALC_FOUND_ROWS * 
+            FROM tb_users a 
+            INNER JOIN tb_persons b USING(idperson) 
+            ORDER BY b.desperson 
+            LIMIT $start, $itemsPerPage"
+        );
+
+        $total = $sql->select("SELECT FOUND_ROWS() AS total");
+
+        return [
+            'data' => $results,
+            'total' => (int)$total[0]['total'],
+            'pages' => ceil($total[0]['total'] / $itemsPerPage)
+        ];
+    }
+
+    public static function getPageSearch($search, $page = 1, $itemsPerPage = 10)
+    {
+        $start = ($page - 1) * $itemsPerPage;
+        $sql = new Sql;
+
+        $results = $sql->select(
+            "SELECT SQL_CALC_FOUND_ROWS * 
+            FROM tb_users a 
+            INNER JOIN tb_persons b USING(idperson) 
+            WHERE b.desperson LIKE :search OR b.desemail = :search OR a.deslogin LIKE :search
+            ORDER BY b.desperson 
+            LIMIT $start, $itemsPerPage", [
+                ":search" => '%'. $search . '%'
+            ]
+        );
+
+        $total = $sql->select("SELECT FOUND_ROWS() AS total");
+
+        return [
+            'data' => $results,
+            'total' => (int)$total[0]['total'],
+            'pages' => ceil($total[0]['total'] / $itemsPerPage)
+        ];
+    }
 }
