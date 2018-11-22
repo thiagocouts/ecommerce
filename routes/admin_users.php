@@ -3,6 +3,52 @@
 use Couts\PageAdmin;
 use Couts\Models\User;
 
+$app->get('/admin/users/:iduser/password', function ($iduser) {
+    User::verifyLogin();
+
+    $user = new User();
+    $user->find((int)$iduser);
+
+    $page = new PageAdmin();
+
+    $page->setTpl("users-password", [
+        "user" => $user->getValues(),
+        "msgError" => $user->getError(),
+        "msgSuccess" => $user->getSuccess()
+    ]);
+});
+
+$app->post('/admin/users/:iduser/password', function ($iduser) {
+    User::verifyLogin();
+
+    if(!isset($_POST['despassword']) || $_POST['despassword'] === "") {
+        User::setError("O campo senha é obrigatório!");
+        header("Location: /admin/users/$iduser/password");
+        exit;
+    }
+
+    if(!isset($_POST['despassword-confirm']) || $_POST['despassword-confirm'] === "") {
+        User::setError("O campo confirmação de senha é obrigatório!");
+        header("Location: /admin/users/$iduser/password");
+        exit;
+    }
+
+    if($_POST['despassword'] !== $_POST['despassword-confirm']) {
+        User::setError("Nova senha deve ser igual a confirmação de senha");
+        header("Location: /admin/users/$iduser/password");
+        exit;
+    }
+
+    $user = new User();
+    $user->find((int)$iduser);
+
+    $user->setPassword(User::getPasswordHash($_POST['despassword']));
+
+    User::setSuccess("Senha alterada com sucesso!");
+    header("Location: /admin/users/$iduser/password");
+    exit;
+});
+
 $app->get('/admin/users', function () {
 
     User::verifyLogin();
@@ -57,7 +103,7 @@ $app->get('/admin/users/delete/:iduser', function ($iduser) {
     exit;
 });
 
-$app->get('/admin/users/:iduser/edit', function ($iduser) {
+$app->get('/admin/users/:iduser', function ($iduser) {
     User::verifyLogin();
 
     $user = new User();
