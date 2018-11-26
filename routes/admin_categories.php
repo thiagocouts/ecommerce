@@ -71,7 +71,7 @@ $app->get('/admin/categories/delete/:idcategory', function ($idcategory) {
     exit;
 });
 
-$app->get('/admin/categories/:idcategory/edit', function ($idcategory) {
+$app->get('/admin/categories/:idcategory', function ($idcategory) {
     User::verifyLogin();
 
     $category = new Category;

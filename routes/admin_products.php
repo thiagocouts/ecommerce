@@ -69,7 +69,7 @@ $app->get('/admin/products/delete/:idproduct', function ($idproduct) {
     exit;
 });
 
-$app->get('/admin/products/:idproduct/edit', function ($idproduct) {
+$app->get('/admin/products/:idproduct', function ($idproduct) {
     User::verifyLogin();
 
     $product = new Product;

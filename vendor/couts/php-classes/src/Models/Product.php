@@ -112,7 +112,7 @@ class Product extends Model
     {
         $ext = explode('.', $file['name']);
         $ext = end($ext); //pegando a ultima posicao do array
-
+        var_dump($file);exit;
         switch ($ext) {
             case 'jpg':
             case 'jpeg':
