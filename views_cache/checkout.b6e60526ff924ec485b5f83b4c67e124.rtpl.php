@@ -47,7 +47,7 @@
 												<p id="billing_number_1_field" class="form-row form-row-wide number-field validate-required">
 													<label class="" for="billing_number_1">Número <abbr title="required" class="required">*</abbr>
 													</label>
-													<input type="text" value="<?php echo htmlspecialchars( $address["desnumber"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Número" id="billing_address_1" name="desnumber" class="input-text ">
+													<input type="text" value="<?php echo htmlspecialchars( $address["desnumber"], ENT_COMPAT, 'UTF-8', FALSE ); ?>" placeholder="Número" id="billing_address_1" name="desnumber" class="input-text " required>
 												</p>
 											</div>
 										</div>
